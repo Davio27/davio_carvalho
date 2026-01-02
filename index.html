@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="img/sobre.png">
+    <title>Dávio Carvalho - Engenheiro de Dados</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+</head>
+<body>
+    <canvas id="snake-bg"></canvas>
+    <div class="cursor-glow"></div>
+    <div class="app-wrapper">
+        <div class="cursor-glow" id="cursorGlow"></div>
+        <div class="particles-background" id="particlesBackground"></div><button
+            class="theme-toggle" id="themeToggle" aria-label="Alternar tema"> <span class="theme-icon"
+                id="themeIcon">🌙</span> <span id="themeText">Escuro</span> </button>
+        <header><!-- Sessão de Cabeçalho -->
+            <div class="code-float" style="top: 15%; left: 45%; animation-delay: 1s;">
+                DAG(dag_id='daily_etl')
+            </div>
+            <div class="code-float" style="bottom: 30%; left: 5%; animation-delay: 3s;">
+                PythonOperator(task_id='clean_data')
+            </div>
+
+            <div class="code-float" style="top: 35%; left: 12%; animation-delay: 5s;">
+                config { type: "table" }
+            </div>
+            <div class="code-float" style="top: 35%; right: 15%; animation-delay: 2.5s;">
+                ref("stg_sales")
+            </div>
+
+            <div class="code-float" style="bottom: 10%; right: 25%; animation-delay: 4.5s;">
+                @app.route('/v1/data')
+            </div>
+            <div class="code-float" style="top: 70%; right: 8%; animation-delay: 0.5s;">
+                INSERT INTO sales (date, amount)
+            </div>
+
+            <div class="code-float" style="top: 5%; right: 30%; animation-delay: 6s;">
+                gcloud run deploy --image
+            </div>
+
+            <div class="code-float" style="top: 5%; right: 70%; animation-delay: 6s;">
+                DELETE FROM users WHERE id=123;
+            </div>
+
+            <div class="code-float" style="bottom: 30%; right: 35%; animation-delay: 2s;">
+                docker build -t data-app .
+            </div>
+
+            <div class="code-float" style="bottom: 5%; left: 40%; animation-delay: 7s;">
+                MERGE INTO target_table T USING...
+            </div>
+            <div class="code-float" style="top: 45%; right: 5%; animation-delay: 1.5s;">
+                spark.read.parquet(path)
+            </div>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <img width="40" height="40" src="https://img.icons8.com/3d-fluency/94/database.png"
+                        alt="database" />
+                    Engenharia de Dados
+                </div>
+                <h1 id="professionalName">Dávio Carvalho</h1>
+                <p class="subtitle" id="professionalTitle">Engenharia de Dados | Python | GCP | SQL | Oracle | BI | DevOps</p>
+                <p class="hero-description" id="heroDescription">Engenheiro de Dados focado em transformar dados em soluções, atuando na construção de pipelines, automações e dashboards
+                para facilitar a tomada de decisão.</p>
+                <div class="cta-buttons"><a href="#projects" class="btn btn-primary"> <span><img width="24" height="24"
+                                src="https://img.icons8.com/dusk/64/group-of-projects.png"
+                                alt="group-of-projects" /></span> Ver Projetos </a>
+                    <a href="#game" class="btn btn-secondary"> <span><img width="24" height="24"
+                                src="https://img.icons8.com/color/48/controller.png" alt="controller" /></span> Jogar
+                    </a> <a href="https://github.com/Davio27" id="githubBtn" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+                        <span><img width="24" height="24" src="https://img.icons8.com/color/48/github-2.png"
+                                alt="github" /></span> GitHub </a>
+                    <a href="https://www.linkedin.com/in/daviocarvalho2001" id="linkedinBtn" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
+                        <span><img width="24" height="24" src="https://img.icons8.com/color/48/linkedin-circled--v1.png"
+                                alt="linkedin" /></span> LinkedIn </a>
+                </div>
+            </div>
+        </header><!-- Sessão Sobre -->
+        <section id="about" class="container">
+            <h2 class="section-title">Sobre Mim</h2>
+            <div class="about-content">
+                <p id="aboutParagraph1">Sou Engenheiro de Dados Jr na Oba Hortifruti, atuando na construção de pipelines
+                    de dados em Google Cloud Platform (BigQuery, Dataform e Airflow), automações em Python, integrações
+                    via APIs e desenvolvimento de soluções analíticas para áreas de negócios.</p>
+                <p id="aboutParagraph2">Tenho forte foco em performance, confiabilidade e escalabilidade de dados, além
+                    de experiência em BI, modelagem de dados e dashboards interativos.</p>
+                <p id="aboutParagraph3">Possuo base sólida em Engenharia de Software, DevOps e Cloud Computing.</p>
+            </div>
+        </section><!-- Sessao Jogo da Memoria-->
+        <section id="game" class="container">
+            <div class="game-section">
+                <h2 class="game-title">
+                    <img width="48" height="48" src="https://img.icons8.com/color/48/squid-game-circle-guard.png"
+                        alt="squid-game-circle-guard" />
+                    <span>Jogo da Memória Tech</span>
+                </h2>
+                <p class="game-subtitle">Teste sua memória como uma verdadeira pessoa da tecnologia!</p>
+                <div id="gameWaitingMessage" class="game-waiting" style="display: none;">
+                    Prepare-se! Memorize as cartas...
+                </div>
+                <div class="game-stats">
+                    <div class="game-stat">
+                        <div class="game-stat-value" id="movesCount">0</div>
+                        <div class="game-stat-label">Movimentos</div>
+                    </div>
+                    <div class="game-stat">
+                        <div class="game-stat-value" id="matchesCount">0</div>
+                        <div class="game-stat-label">Acertos</div>
+                    </div>
+                    <div class="game-stat">
+                        <div class="game-stat-value" id="timerCount">0</div>
+                        <div class="game-stat-label">Tempo (s)</div>
+                    </div>
+                </div>
+                <div class="game-board" id="gameBoard"></div>
+                <div class="flex gap-4">
+                    <button class="game-button" id="startButton"><img width="34" height="34" src="https://img.icons8.com/3d-fluency/94/controller.png" alt="controller" /> Iniciar Jogo</button>
+                    <button class="game-button" id="resetButton" style="display: none;">
+                        <img width="34" height="34" src="https://img.icons8.com/office/40/restart.png" alt="restart" />
+                        <span>Reiniciar</span>
+                    </button>
+                </div>
+            </div>
+        </section><!-- Sessão de Habilidades -->
+        <section id="skills" class="container">
+            <h2 class="section-title">Competências Técnicas</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3><img width="48" height="48" src="https://img.icons8.com/fluency/48/cloud-database.png" alt="cloud-database" /> Engenharia de Dados &amp; Cloud</h3>
+                    <div class="skill-tags"><span class="skill-tag">Python (Avançado)</span> <span class="skill-tag">SQL
+                            Avançado</span> <span class="skill-tag">Google Cloud Platform</span> <span
+                            class="skill-tag">BigQuery</span> <span class="skill-tag">Dataform</span> <span
+                            class="skill-tag">Airflow</span> <span class="skill-tag">Azure</span> <span
+                            class="skill-tag">Oracle Database</span> <span class="skill-tag">Data Warehouse</span> <span
+                            class="skill-tag">ETL / ELT</span> <span class="skill-tag">Big Data</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3><img width="48" height="48"
+                        src="https://img.icons8.com/external-flatart-icons-flat-flatarticons/64/external-settings-statistical-analysis-flatart-icons-flat-flatarticons.png"
+                        alt="external-settings-statistical-analysis-flatart-icons-flat-flatarticons" /> DevOps &amp; Automação</h3>
+                    <div class="skill-tags"><span class="skill-tag">Git &amp; GitHub</span> <span
+                            class="skill-tag">GitHub Actions</span> <span class="skill-tag">CI/CD</span> <span
+                            class="skill-tag">Linux</span> <span class="skill-tag">Automação Python</span> <span
+                            class="skill-tag">APIs REST</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3><img width="48" height="48" src="https://img.icons8.com/color/48/statistics.png" alt="statistics" /> BI &amp; Analytics</h3>
+                    <div class="skill-tags"><span class="skill-tag">Power BI</span> <span class="skill-tag">Modelagem de
+                            Dados</span> <span class="skill-tag">Dashboards Analíticos</span> <span
+                            class="skill-tag">Data Visualization</span> <span class="skill-tag">Business
+                            Intelligence</span>
+                    </div>
+                </div>
+            </div>
+        </section><!-- Sessão de Projetos -->
+        <section id="projects" class="container">
+            <h2 class="section-title">Projetos em Destaque</h2>
+            <div class="projects-grid"><!-- Project 1 -->
+                <div class="project-card">
+                    <h3><img width="48" height="48" src="https://img.icons8.com/doodle/48/coins--v1.png" alt="coins" />
+                        Pipeline de Cotações de Moedas</h3>
+                    <p>Pipeline completo de engenharia de dados para coleta, armazenamento e visualização de cotações de
+                        moedas em tempo real.</p>
+                    <div class="project-features">
+                        <ul>
+                            <li>Coleta automática de dados via API</li>
+                            <li>Atualização com GitHub Actions</li>
+                            <li>Armazenamento com merge histórico</li>
+                            <li>Dashboard interativo com autenticação</li>
+                            <li>Gráficos em tempo real</li>
+                            <li>Tema claro/escuro</li>
+                        </ul>
+                    </div>
+                    <div class="tech-stack"><span class="tech-badge">Python</span> <span class="tech-badge">Flask</span>
+                        <span class="tech-badge">SQLite</span> <span class="tech-badge">Chart.js</span> <span
+                            class="tech-badge">GitHub Actions</span> <span class="tech-badge">Render</span>
+                    </div>
+                    <div class="project-links"><a href="https://github.com/Davio27/JOB-Projeto-Engenharia-de-Dados"
+                            class="project-link link-github" target="_blank" rel="noopener noreferrer"> <span>💻</span>
+                            GitHub </a> <a href="https://job-projeto-engenharia-de-dados-1.onrender.com"
+                            class="project-link link-demo" target="_blank" rel="noopener noreferrer"> <span>🚀</span>
+                            Demo </a>
+                    </div>
+                </div><!-- Project 2 -->
+                <div class="project-card">
+                    <h3><img width="48" height="48" src="https://img.icons8.com/emoji/48/microbe.png" alt="microbe" />
+                        Dashboard Interativo COVID-19</h3>
+                    <p>Aplicação web para visualização e exploração de dados da pandemia de COVID-19 no Brasil.</p>
+                    <div class="project-features">
+                        <ul>
+                            <li>Mapa do Brasil clicável</li>
+                            <li>Gráficos dinâmicos</li>
+                            <li>Globo 3D interativo</li>
+                            <li>Chatbot assistente</li>
+                            <li>Tema claro/escuro</li>
+                        </ul>
+                    </div>
+                    <div class="tech-stack"><span class="tech-badge">Python</span> <span class="tech-badge">Flask</span>
+                        <span class="tech-badge">Pandas</span> <span class="tech-badge">JavaScript</span> <span
+                            class="tech-badge">Chart.js</span> <span class="tech-badge">D3.js</span>
+                    </div>
+                    <div class="project-links"><a href="https://github.com/Davio27/Project_DashBoard_Covid19"
+                            class="project-link link-github" target="_blank" rel="noopener noreferrer"> <span>💻</span>
+                            GitHub </a> <a href="https://project-dashboard-covid19.onrender.com"
+                            class="project-link link-demo" target="_blank" rel="noopener noreferrer"> <span>🚀</span>
+                            Demo </a>
+                    </div>
+                </div><!-- Project 3 -->
+                <div class="project-card">
+                    <h3><img width="48" height="48" src="https://img.icons8.com/color/48/google-cloud.png" alt="google-cloud" />
+                        Pipelines ELT em GCP</h3>
+                    <p>Construção de pipelines ELT robustos utilizando BigQuery, Dataform e Airflow para ambientes
+                        analíticos.</p>
+                    <div class="project-features">
+                        <ul>
+                            <li>Modelagem dimensional</li>
+                            <li>Transformações SQL otimizadas</li>
+                            <li>Orquestração com Airflow</li>
+                            <li>Qualidade de dados</li>
+                            <li>Documentação automatizada</li>
+                        </ul>
+                    </div>
+                    <div class="tech-stack"><span class="tech-badge">GCP</span> <span class="tech-badge">BigQuery</span>
+                        <span class="tech-badge">Dataform</span> <span class="tech-badge">Airflow</span> <span
+                            class="tech-badge">SQL</span> <span class="tech-badge">Python</span><span class="tech-badge">Functions</span>
+                            <span class="tech-badge">Cloud Run</span>
+                    </div>
+                    <div class="project-links"><a href="https://github.com/Davio27/Projeto_Rox_School"
+                            class="project-link link-github" target="_blank" rel="noopener noreferrer"> <span>💻</span>
+                            GitHub </a>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <h3><img width="48" height="48" src="https://img.icons8.com/fluency/48/system-task.png" alt="system-task" />
+                        Mockup de Monitoramento Operacionais</h3>
+                    <p>Interface web para acompanhamento de pipelines de dados, alertas de falhas e logs de execução em
+                        tempo real.</p>
+                    <div class="project-features">
+                        <ul>
+                            <li>Backend Flask com integração via API ao Airflow</li>
+                            <li>Deploy automatizado via Docker no <strong>Cloud Run</strong></li>
+                            <li>Notificações de erro e monitoramento de SLA</li>
+                            <li>Visualização de logs de sistemas legados</li>
+                        </ul>
+                    </div>
+                    <div class="tech-stack">
+                        <span class="tech-badge">Python</span>
+                        <span class="tech-badge">Flask</span>
+                        <span class="tech-badge">Vertex AI</span>
+                        <span class="tech-badge">Docker</span>
+                        <span class="tech-badge">DevOps</span>
+                        <span class="tech-badge">BigQuery</span>
+                    </div>
+                    <div class="project-links">
+                        <a href="https://github.com/Davio27/-Mockup-de-Monitoramento-Operacionais" class="project-link link-github" target="_blank" rel="noopener noreferrer"><span>💻</span> Detalhes Técnicos</a>
+                    </div>
+                </div>
+            </div>
+        </section><!-- Sessão de Experiência -->
+        <section id="experience" class="container">
+            <h2 class="section-title">Experiência Profissional</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h3>Engenheiro de Dados Jr</h3>
+                    <p class="company">Oba Hortifruti</p>
+                    <p class="period">Maio 2025 — Presente</p>
+                    <ul class="text-sm text-gray-400 mt-2 list-disc ml-4 space-y-2">
+                        <li>Estruturação de <strong>Pipelines ELT</strong> robustos no GCP, utilizando <strong>Dataform
+                                (.sqlx,
+                                transform.js)</strong> para transformações e <strong>Apache Airflow (dag.py)</strong>
+                            para orquestração.
+                        </li>
+                        <li>Criação de automações de ingestão e integração entre sistemas legados (Oracle) e
+                            <strong>BigQuery</strong>,
+                            garantindo a sincronia de dados.</li>
+                        <li>Desenvolvimento de <strong>painéis de monitoramento com Flask</strong>, fornecendo
+                            visibilidade total sobre
+                            a saúde das cargas e falhas de ferramentas.</li>
+                        <li>Implementação de boas práticas de <strong>DevOps</strong> na infraestrutura de dados,
+                            utilizando
+                            <strong>Cloud Run</strong> para deploy de microserviços de integração.
+                        </li>
+                        <li>Suporte à operação analítica e administração do ambiente de BI, garantindo 100% de
+                            disponibilidade para
+                            áreas estratégicas.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Desenvolvedor Web Freelancer</h3>
+                    <p class="company">O Boticário | GioFragrancias</p>
+                    <p class="period">Outubro 2024 — Fevereiro 2025</p>
+                    <ul class="text-sm text-gray-400 mt-2 list-disc ml-4 space-y-2">
+                        <li><strong>Grupo O Boticário:</strong> Desenvolvimento de um Quiz dinâmico para pesquisa de
+                            mercado em eventos,
+                            focado em alta interatividade e coleta de dados.</li>
+                        <li><strong>GioFragrancias:</strong> Criação de um catálogo web interativo para exposição de
+                            produtos e
+                            biotipos, otimizando a experiência de compra digital.</li>
+                        <li>Foco em <strong>UX/UI responsiva</strong> e performance de front-end para ferramentas de
+                            engajamento.</li>
+                    </ul>
+                </div>
+                <div class="timeline-item">
+                    <h3>Assistente de TI N1</h3>
+                    <p class="company">TermoFibra - Comércio de Isolamento Térmico</p>
+                    <p class="period">Janeiro 2022 — Maio 2025 (3 anos e 4 meses)</p>
+                    <ul class="text-sm text-gray-400 mt-2 list-disc ml-4 space-y-2">
+                        <li><strong>Desenvolvimento de Software:</strong> Atuação no ciclo de criação de ferramentas
+                            internas para
+                            otimização de processos e suporte à operação da empresa.</li>
+                        <li><strong>Gestão de Infraestrutura:</strong> Instalação, configuração e manutenção de hardware
+                            (desktops/notebooks) e ativos de rede (roteadores e periféricos).</li>
+                        <li><strong>Segurança e Redes:</strong> Implementação e manutenção preventiva de firewalls e
+                            softwares de
+                            segurança, garantindo a integridade do perímetro digital.</li>
+                        <li><strong>Suporte Técnico Especializado:</strong> Atendimento N1 focado em alta
+                            disponibilidade de sistemas e
+                            resolução ágil de problemas críticos de hardware e software.</li>
+                    </ul>
+                </div>
+            </div>
+        </section><!-- Sessão de Educação -->
+        <section id="education" class="container">
+            <h2 class="section-title">Formação &amp; Certificações</h2>
+            <div class="education-grid">
+                <div class="education-card">
+                    <h3><img width="38" height="38" src="https://img.icons8.com/pin/100/graduation-cap.png" alt="graduation"/>
+                        Técnico em Desenvolvimento de Sistemas</h3>
+                    <p>ETEC Bento Quirino</p>
+                </div>
+                <div class="education-card">
+                    <h3><img width="38" height="38" src="https://img.icons8.com/pin/100/graduation-cap.png" alt="graduation"/>
+                        Análise e Desenvolvimento de Sistemas</h3>
+                    <p>UniMetrocamp (Graduando)</p>
+                </div>
+                <div class="education-card">
+                    <h3><img width="38" height="38" src="https://img.icons8.com/color/48/courses.png" alt="courses"/>
+                        Engenharia de Dados</h3>
+                    <p>Udemy</p>
+                </div>
+                <div class="education-card">
+                    <h3><img width="38" height="38" src="https://img.icons8.com/color/48/courses.png" alt="courses"/>
+                        Data Warehouse com BigQuery</h3>
+                    <p>Rox School</p>
+                </div>
+                <div class="education-card">
+                    <h3><img width="38" height="38" src="https://img.icons8.com/color/48/courses.png" alt="courses"/>
+                        Google Cloud Platform</h3>
+                    <p>Dataform, Cloud run, Dataflow, Vertex AI, Cloud Storage, Cloud Functions ...</p>
+                </div>
+                <div class="education-card">
+                    <h3><img width="38" height="38" src="https://img.icons8.com/color/48/courses.png" alt="courses"/>
+                        Power BI, SQL, Big Data</h3>
+                    <p>Fundação Bradesco</p>
+                </div>
+            </div>
+        </section><!-- Rodapé -->
+        <footer>
+            <div class="footer-content">
+                <div class="social-links"><a href="https://github.com/Davio27" id="footerGithub" class="social-link" target="_blank"
+                        rel="noopener noreferrer" aria-label="GitHub">💻</a> <a href="https://www.linkedin.com/in/daviocarvalho2001" id="footerLinkedin"
+                        class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">💼</a> <a
+                        href="mailto:daviccarvalho11@hotmail.com" id="footerEmail" class="social-link" aria-label="Email">📧</a>
+                </div>
+                <p class="copyright">© 2026 Dávio Carvalho. Todos os direitos reservados.</p>
+            </div>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
