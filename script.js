@@ -255,17 +255,23 @@ const defaultConfig = {
     email_address: 'daviccarvalho11@hotmail.com'
 };
 
-// Theme toggle functionality
+// Função para alternar tema claro/escuro
 const themeToggle = document.getElementById('themeToggle');
-const themeIcon = document.getElementById('themeIcon');
-const themeText = document.getElementById('themeText');
+const themeIconContainer = document.getElementById('themeIconContainer');
 const body = document.body;
-
+const sunImg = 'https://img.icons8.com/external-flaticons-flat-flat-icons/64/external-sun-100-most-used-icons-flaticons-flat-flat-icons-2.png';
+const moonImg = 'https://img.icons8.com/fluency/48/full-moon--v1.png';
 themeToggle.addEventListener('click', () => {
+    themeIconContainer.classList.remove('rotate-in');
+    void themeIconContainer.offsetWidth;
+    themeIconContainer.classList.add('rotate-in');
     body.classList.toggle('light-mode');
     const isLight = body.classList.contains('light-mode');
-    themeIcon.textContent = isLight ? '☀️' : '🌙';
-    themeText.textContent = isLight ? 'Claro' : 'Escuro';
+    if (isLight) {
+        themeIconContainer.innerHTML = `<img width="45" height="45" src="${sunImg}" alt="sun"/>`;
+    } else {
+        themeIconContainer.innerHTML = `<img width="38" height="38" src="${moonImg}" alt="moon"/>`;
+    }
 });
 
 // Smooth scroll for navigation

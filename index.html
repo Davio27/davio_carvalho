@@ -13,9 +13,12 @@
     <div class="cursor-glow"></div>
     <div class="app-wrapper">
         <div class="cursor-glow" id="cursorGlow"></div>
-        <div class="particles-background" id="particlesBackground"></div><button
-            class="theme-toggle" id="themeToggle" aria-label="Alternar tema"> <span class="theme-icon"
-                id="themeIcon">🌙</span> <span id="themeText">Escuro</span> </button>
+        <div class="particles-background" id="particlesBackground"></div>
+        <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
+            <div id="themeIconContainer" class="theme-icon-wrapper">
+                <img width="48" height="48" src="https://img.icons8.com/fluency/48/full-moon--v1.png" alt="full-moon--v1" />
+            </div>
+        </button>
         <header><!-- Sessão de Cabeçalho -->
             <div class="code-float" style="top: 15%; left: 45%; animation-delay: 1s;">
                 DAG(dag_id='daily_etl')
