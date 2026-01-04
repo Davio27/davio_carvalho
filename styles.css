@@ -1261,6 +1261,26 @@ body.light-mode footer {
     transform: translateY(-3px);
 }
 
+.visitor-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    color: #71717a;
+    font-weight: 500;
+}
+
+.visitor-counter #visitCount {
+    color: #3b82f6;
+    font-weight: 700;
+}
+
+body.light-mode .visitor-counter {
+    color: #52525b;
+}
+
 .copyright {
     color: #71717a;
     font-size: 0.9rem;

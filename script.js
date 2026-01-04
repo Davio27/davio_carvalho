@@ -601,3 +601,32 @@ if (window.elementSdk) {
     }
     animate();
 })();
+
+/* =========================================
+CONTADOR DE VISITAS (DISTINTOS)
+========================================= */
+function initVisitorCounter() {
+    const counterEl = document.getElementById('visitCount');
+    if (!counterEl) return;
+    const namespace = 'davio-portfolio-2026';
+    const key = 'unique-visits';
+    const hasVisited = localStorage.getItem('hasVisitedPortfolio');
+
+    if (!hasVisited) {
+        fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+            .then(res => res.json())
+            .then(data => {
+                counterEl.textContent = data.value;
+                localStorage.setItem('hasVisitedPortfolio', 'true');
+            })
+            .catch(() => counterEl.textContent = '---');
+    } else {
+        fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+            .then(res => res.json())
+            .then(data => {
+                counterEl.textContent = data.value;
+            })
+            .catch(() => counterEl.textContent = '---');
+    }
+}
+initVisitorCounter();
