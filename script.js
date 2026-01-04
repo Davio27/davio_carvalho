@@ -605,28 +605,42 @@ if (window.elementSdk) {
 /* =========================================
 CONTADOR DE VISITAS (DISTINTOS)
 ========================================= */
+// Importações corrigidas: adicionado getDatabase, ref, runTransaction e get
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, runTransaction, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+const firebaseConfig = {
+    apiKey: "AIzaSyC2Pa3bOvJHHF-A2QJH9s4f6prgEZOCW88", 
+    authDomain: "projetodavio.firebaseapp.com",
+    projectId: "projetodavio",
+    databaseURL: "https://projetodavio-default-rtdb.europe-west1.firebasedatabase.app/", 
+    storageBucket: "projetodavio.firebasestorage.app",
+    messagingSenderId: "993932383533",
+    appId: "1:993932383533:web:cf0db3317a811785436fa4"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
 function initVisitorCounter() {
     const counterEl = document.getElementById('visitCount');
     if (!counterEl) return;
-    const namespace = 'davio-portfolio-2026';
-    const key = 'unique-visits';
-    const hasVisited = localStorage.getItem('hasVisitedPortfolio');
-
-    if (!hasVisited) {
-        fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-            .then(res => res.json())
-            .then(data => {
-                counterEl.textContent = data.value;
-                localStorage.setItem('hasVisitedPortfolio', 'true');
-            })
-            .catch(() => counterEl.textContent = '---');
+    const visitsRef = ref(db, 'stats/totalVisits');
+    const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+    if (!isLocal) {
+        runTransaction(visitsRef, (currentValue) => {
+            return (currentValue || 0) + 1;
+        }).then((result) => {
+            if (result.committed) {
+                counterEl.textContent = result.snapshot.val();
+            }
+        }).catch(err => console.error("Erro no Firebase:", err));
     } else {
-        fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
-            .then(res => res.json())
-            .then(data => {
-                counterEl.textContent = data.value;
-            })
-            .catch(() => counterEl.textContent = '---');
+        get(visitsRef).then((snapshot) => {
+            if (snapshot.exists()) {
+                counterEl.textContent = snapshot.val() + " (Modo Local)";
+            }
+        });
+        console.log("Acesso local detectado. O contador não foi incrementado.");
     }
 }
 initVisitorCounter();
