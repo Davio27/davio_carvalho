@@ -1,11 +1,4 @@
 
-const defaultConfig = {
-    // ... cores e fontes mantidas
-    professional_name: 'Dávio Carvalho',
-    professional_title: 'Engenheiro de Dados | Analista I | GCP | Python | SQL | Power Automate',
-    hero_description: 'Especialista em Engenharia de Dados com foco em automação, pipelines escaláveis e transformação digital, atuando na modernização de arquiteturas de dados e BI.',
-    // ... restante dos parágrafos
-};
 // Memory Game Logic
 const gameState = {
     cards: [
@@ -253,11 +246,11 @@ const defaultConfig = {
     font_family: 'Inter',
     font_size: 16,
     professional_name: 'Dávio Carvalho',
-    professional_title: 'Engenheiro de Dados | Python | GCP | SQL | BI | DevOps',
-    hero_description: 'Profissional ousado e curioso, com experiência em Engenharia de Dados, BI e Desenvolvimento Web, atuando na construção de pipelines escaláveis, automações e dashboards analíticos.',
-    about_paragraph_1: 'Sou Engenheiro de Dados Jr na Oba Hortifruti, atuando na construção de pipelines de dados em Google Cloud Platform (BigQuery, Dataform e Airflow), automações em Python, integrações via APIs e desenvolvimento de soluções analíticas para áreas estratégicas.',
-    about_paragraph_2: 'Tenho forte foco em performance, confiabilidade e escalabilidade de dados, além de experiência em BI, modelagem de dados e dashboards interativos.',
-    about_paragraph_3: 'Possuo base sólida em Engenharia de Software, DevOps e Cloud Computing.',
+    professional_title: 'Engenheiro de Dados | Analista I | GCP | Cloud Specialist',
+    hero_description: 'Especialista em automações complexas com Python, operando em ecossistemas Cloud (Cloud Run, Functions, GCE). Foco em otimização de DAGs no Airflow e pipelines de ETL/ELT de alta performance.',
+    about_paragraph_1: 'Sou Engenheiro de Dados | Analista I na Oba Hortifruti, focado na construção de pipelines de dados escaláveis no GCP, utilizando Dataform e Airflow para orquestrar transformações complexas.',
+    about_paragraph_2: 'Atuo com ETL externo, integração de APIs e processamento serverless com Cloud Run e Functions. Tenho experiência em otimização de performance dentro de DAGs e análise via Vertex AI Colab.',
+    about_paragraph_3: 'Domino a integração entre sistemas legados (Oracle) e BigQuery, além de criar automações de processos interativos com Power Automate.',
     github_link: 'https://github.com/Davio27',
     linkedin_link: 'https://www.linkedin.com/in/daviocarvalho2001',
     email_address: 'daviccarvalho11@hotmail.com'
