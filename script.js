@@ -1,3 +1,11 @@
+
+const defaultConfig = {
+    // ... cores e fontes mantidas
+    professional_name: 'Dávio Carvalho',
+    professional_title: 'Engenheiro de Dados | Analista I | GCP | Python | SQL | Power Automate',
+    hero_description: 'Especialista em Engenharia de Dados com foco em automação, pipelines escaláveis e transformação digital, atuando na modernização de arquiteturas de dados e BI.',
+    // ... restante dos parágrafos
+};
 // Memory Game Logic
 const gameState = {
     cards: [
