@@ -1,7 +1,7 @@
 
 // Memory Game Logic
-const gameState = {
-    cards: [
+const gameIcons = {
+    level1: [
         '<img width="48" height="48" src="https://img.icons8.com/color/48/fortnite-llama.png" alt="llama"/>',
         '<img width="48" height="48" src="https://img.icons8.com/color/48/crash-bandicoot.png" alt="crash"/>',
         '<img width="48" height="48" src="https://img.icons8.com/color/48/bad-piggies.png" alt="piggies"/>',
@@ -11,6 +11,20 @@ const gameState = {
         '<img width="48" height="48" src="https://img.icons8.com/color/48/joker.png" alt="joker"/>',
         '<img width="48" height="48" src="https://img.icons8.com/color/48/greek-helmet.png" alt="helmet"/>'
     ],
+    level2Addons: [
+        '<img width="48" height="48" src="https://img.icons8.com/color/48/shield.png" alt="shield"/>',
+        '<img width="48" height="48" src="https://img.icons8.com/color/48/diamonds.png" alt="diamonds"/>',
+        '<img width="48" height="48" src="https://img.icons8.com/color/48/slot-machine.png" alt="slot-machine"/>',
+        '<img width="48" height="48" src="https://img.icons8.com/color/48/cuphead.png" alt="cuphead"/>',
+        '<img width="48" height="48" src="https://img.icons8.com/color/48/super-mario.png" alt="mario"/>',
+        '<img width="48" height="48" src="https://img.icons8.com/color/48/monster-face.png" alt="monster-face"/>',
+        '<img width="48" height="48" src="https://img.icons8.com/color/48/subnautica.png" alt="subnautica"/>'
+    ]
+};
+
+const gameState = {
+    currentLevel: 1,
+    cards: [],
     flippedCards: [],
     matchedPairs: 0,
     moves: 0,
@@ -19,6 +33,38 @@ const gameState = {
     isProcessing: false,
     gameStarted: false
 };
+
+function showLevelTransition() {
+    const overlay = document.createElement('div');
+    overlay.className = 'level-transition-overlay';
+    overlay.innerHTML = `
+        <div class="transition-card">
+            <img width="100" height="100" src="https://img.icons8.com/3d-fluency/188/star.png" alt="star"/>
+            <h2>Sensacional!</h2>
+            <p>Você dominou o Nível 1. Você é muito bom nisso!</p>
+            <span>Preparando Nível 2...</span>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        overlay.classList.add('fade-out');
+        setTimeout(() => {
+            overlay.remove();
+            gameState.currentLevel = 2;
+            startNextLevel();
+        }, 500);
+    }, 3500);
+}
+
+function startNextLevel() {
+    gameState.cards = [...gameIcons.level1, ...gameIcons.level2Addons];
+    const gameBoard = document.getElementById('gameBoard');
+    gameBoard.style.gridTemplateColumns = 'repeat(auto-fit, minmax(80px, 1fr))';
+    
+    setupGame();
+    startGame();
+}
 
 function setupGame() {
     const gameBoard = document.getElementById('gameBoard');
@@ -81,16 +127,17 @@ function resetGame() {
     if (gameState.timerInterval) {
         clearInterval(gameState.timerInterval);
     }
-
     const gameBoard = document.getElementById('gameBoard');
     gameBoard.innerHTML = '';
-
+    gameState.currentLevel = 1;
+    gameState.cards = gameIcons.level1;
     gameState.flippedCards = [];
     gameState.matchedPairs = 0;
     gameState.moves = 0;
     gameState.timer = 0;
     gameState.isProcessing = false;
     gameState.gameStarted = false;
+    gameBoard.style.gridTemplateColumns = 'repeat(4, 1fr)';
     updateStats();
     const startButton = document.getElementById('startButton');
     const resetButton = document.getElementById('resetButton');
@@ -127,25 +174,30 @@ function checkMatch() {
     const [card1, card2] = gameState.flippedCards;
     const icon1 = card1.dataset.icon;
     const icon2 = card2.dataset.icon;
+
     setTimeout(() => {
         if (icon1 === icon2) {
             card1.classList.add('matched');
             card2.classList.add('matched');
             const approvalImg = `<img width="48" height="48" src="https://img.icons8.com/color/48/approval--v1.png" alt="approval"/>`;
-            const back1 = card1.querySelector('.game-card-back');
-            const back2 = card2.querySelector('.game-card-back');
-            if (back1) back1.innerHTML = approvalImg;
-            if (back2) back2.innerHTML = approvalImg;
+            card1.querySelector('.game-card-back').innerHTML = approvalImg;
+            card2.querySelector('.game-card-back').innerHTML = approvalImg;
             gameState.matchedPairs++;
             updateStats();
             if (gameState.matchedPairs === gameState.cards.length) {
                 clearInterval(gameState.timerInterval);
-                setTimeout(() => showVictoryMessage(), 500);
+
+                if (gameState.currentLevel === 1) {
+                    setTimeout(() => showLevelTransition(), 1000);
+                } else {
+                    setTimeout(() => showVictoryMessage(), 500);
+                }
             }
         } else {
             card1.classList.remove('flipped');
             card2.classList.remove('flipped');
         }
+
         gameState.flippedCards = [];
         gameState.isProcessing = false;
     }, 800);
@@ -645,3 +697,5 @@ function initVisitorCounter() {
     }
 }
 initVisitorCounter();
+// Inicializa as cartas do nível 1 no estado global
+gameState.cards = gameIcons.level1;
