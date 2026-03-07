@@ -1,4 +1,4 @@
-
+﻿
 // Memory Game Logic
 const gameIcons = {
     level1: [
@@ -96,6 +96,7 @@ function setupGame() {
 }
 
 function startGame() {
+    trackEvent('game_start', { level: gameState.currentLevel });
     const startButton = document.getElementById('startButton');
     const resetButton = document.getElementById('resetButton');
     const waitingMessage = document.getElementById('gameWaitingMessage');
@@ -220,6 +221,11 @@ function updateStats() {
 }
 
 function showVictoryMessage() {
+    trackEvent('game_win', {
+        level: gameState.currentLevel,
+        moves: gameState.moves,
+        duration_sec: gameState.timer
+    });
     const message = document.createElement('div');
     message.style.cssText = `
         position: fixed;
@@ -656,16 +662,16 @@ if (window.elementSdk) {
 })();
 
 /* =========================================
-CONTADOR DE VISITAS (DISTINTOS)
+ANALYTICS + CONTADOR DE VISITAS
 ========================================= */
-// Importações corrigidas: adicionado getDatabase, ref, runTransaction e get
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getDatabase, ref, runTransaction, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getDatabase, ref, runTransaction, get, push, set, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
 const firebaseConfig = {
-    apiKey: "AIzaSyC2Pa3bOvJHHF-A2QJH9s4f6prgEZOCW88", 
+    apiKey: "AIzaSyC2Pa3bOvJHHF-A2QJH9s4f6prgEZOCW88",
     authDomain: "projetodavio.firebaseapp.com",
     projectId: "projetodavio",
-    databaseURL: "https://projetodavio-default-rtdb.europe-west1.firebasedatabase.app/", 
+    databaseURL: "https://projetodavio-default-rtdb.europe-west1.firebasedatabase.app/",
     storageBucket: "projetodavio.firebasestorage.app",
     messagingSenderId: "993932383533",
     appId: "1:993932383533:web:cf0db3317a811785436fa4"
@@ -674,28 +680,163 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
+function isLocalHost() {
+    return window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+}
+
+function getDayKey() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function getSessionId() {
+    const key = 'portfolio_session_id';
+    let id = localStorage.getItem(key);
+    if (!id) {
+        id = `s_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+        localStorage.setItem(key, id);
+    }
+    return id;
+}
+
+function sanitizeProjectKey(name) {
+    return (name || 'unknown_project')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9]+/g, '_')
+        .replace(/^_+|_+$/g, '')
+        .slice(0, 80);
+}
+
+function trackEvent(eventName, payload = {}) {
+    if (isLocalHost()) return;
+
+    const eventRef = push(ref(db, 'analytics/events'));
+    set(eventRef, {
+        event_name: eventName,
+        timestamp: Date.now(),
+        page: window.location.pathname || '/',
+        session_id: getSessionId(),
+        ...payload
+    }).catch((err) => console.error('Erro ao registrar evento:', err));
+}
+
+function incrementMetric(path) {
+    return runTransaction(ref(db, path), (currentValue) => (currentValue || 0) + 1)
+        .catch((err) => console.error(`Erro ao incrementar métrica ${path}:`, err));
+}
+
+function initSessionTracking() {
+    const sessionId = getSessionId();
+    const startedAt = Number(localStorage.getItem('portfolio_session_started_at')) || Date.now();
+    localStorage.setItem('portfolio_session_started_at', String(startedAt));
+
+    if (!isLocalHost()) {
+        update(ref(db, `analytics/sessions/${sessionId}`), {
+            session_id: sessionId,
+            started_at: startedAt,
+            last_seen_at: Date.now(),
+            page: window.location.pathname || '/',
+            referrer: document.referrer || null,
+            user_agent: navigator.userAgent,
+            is_mobile: /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
+        }).catch((err) => console.error('Erro ao iniciar sessão:', err));
+    }
+
+    const closeSession = () => {
+        if (isLocalHost()) return;
+        const endAt = Date.now();
+        const durationSec = Math.max(0, Math.round((endAt - startedAt) / 1000));
+        update(ref(db, `analytics/sessions/${sessionId}`), {
+            ended_at: endAt,
+            duration_sec: durationSec,
+            last_seen_at: endAt
+        }).catch((err) => console.error('Erro ao encerrar sessão:', err));
+    };
+
+    window.addEventListener('beforeunload', closeSession);
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') closeSession();
+    });
+}
+
 function initVisitorCounter() {
     const counterEl = document.getElementById('visitCount');
     if (!counterEl) return;
+
     const visitsRef = ref(db, 'stats/totalVisits');
-    const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
-    if (!isLocal) {
-        runTransaction(visitsRef, (currentValue) => {
-            return (currentValue || 0) + 1;
-        }).then((result) => {
+    const dailyRef = ref(db, `stats/dailyVisits/${getDayKey()}`);
+
+    if (!isLocalHost()) {
+        Promise.all([
+            runTransaction(visitsRef, (currentValue) => (currentValue || 0) + 1),
+            runTransaction(dailyRef, (currentValue) => (currentValue || 0) + 1)
+        ]).then(([result]) => {
             if (result.committed) {
                 counterEl.textContent = result.snapshot.val();
             }
-        }).catch(err => console.error("Erro no Firebase:", err));
+            trackEvent('visit_registered', { day_key: getDayKey() });
+        }).catch(err => console.error('Erro no Firebase:', err));
     } else {
         get(visitsRef).then((snapshot) => {
             if (snapshot.exists()) {
-                counterEl.textContent = snapshot.val() + " (Modo Local)";
+                counterEl.textContent = snapshot.val() + ' (Modo Local)';
             }
         });
-        console.log("Acesso local detectado. O contador não foi incrementado.");
+        console.log('Acesso local detectado. O contador não foi incrementado.');
     }
 }
+
+function initPortfolioTracking() {
+    const buttonMappings = [
+        { id: 'githubBtn', event: 'github_click' },
+        { id: 'linkedinBtn', event: 'linkedin_click' },
+        { id: 'cvBtn', event: 'cv_click' },
+        { id: 'footerGithub', event: 'footer_github_click' },
+        { id: 'footerLinkedin', event: 'footer_linkedin_click' },
+        { id: 'footerEmail', event: 'footer_email_click' }
+    ];
+
+    buttonMappings.forEach(({ id, event }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener('click', () => trackEvent(event));
+    });
+
+    const projectCards = document.querySelectorAll('.project-card');
+    projectCards.forEach((card) => {
+        const titleEl = card.querySelector('h3');
+        const projectName = titleEl ? titleEl.textContent.trim() : 'Projeto';
+        const projectKey = sanitizeProjectKey(projectName);
+        const projectLinks = card.querySelectorAll('.project-link');
+
+        projectLinks.forEach((link) => {
+            link.addEventListener('click', () => {
+                const linkType = link.classList.contains('link-demo')
+                    ? 'demo_click'
+                    : (link.textContent.toLowerCase().includes('github') ? 'github_click' : 'details_click');
+
+                incrementMetric(`projects/metrics/${projectKey}/views`);
+                incrementMetric(`projects/metrics/${projectKey}/${linkType}s`);
+
+                trackEvent('project_open', {
+                    project_name: projectName,
+                    project_key: projectKey,
+                    link_type: linkType,
+                    href: link.getAttribute('href')
+                });
+            });
+        });
+    });
+}
+
+initSessionTracking();
 initVisitorCounter();
+initPortfolioTracking();
+
 // Inicializa as cartas do nível 1 no estado global
 gameState.cards = gameIcons.level1;

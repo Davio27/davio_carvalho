@@ -1,0 +1,13 @@
+{
+    "stats": {
+        "totalVisits": 0,
+        "dailyVisits": {}
+    },
+    "analytics": {
+        "events": {},
+        "sessions": {}
+    },
+    "projects": {
+        "metrics": {}
+    }
+}
